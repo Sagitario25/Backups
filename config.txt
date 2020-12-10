@@ -1,0 +1,3 @@
+where>E:\Copia de seguridad
+lastcommand>cls
+end>keep this here
