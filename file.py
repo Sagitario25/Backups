@@ -10,4 +10,5 @@ class newFile:
 		self.moddate = os.path.getmtime (self.path)
 
 	def copy (self, path):
+		#Copies the file to the desired path
 		shutil.copyfile (self.path, os.path.join (path, self.name))

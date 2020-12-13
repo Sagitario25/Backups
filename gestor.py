@@ -3,6 +3,7 @@ import os
 import time
 
 def compareStrings (list1, list2):
+	#Compares two strings efficently
 	if len (list1) != len (list2):
 		return False
 

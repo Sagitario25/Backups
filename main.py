@@ -2,6 +2,7 @@ from gestor import Gestor
 import os
 import time
 import log
+import reader
 
 def mkdir (absolutePath, newdirs):#Creation of new dirs
 	for i in newdirs.split ('\\'):
@@ -16,12 +17,13 @@ def relativePath (relative = ""):
 #Reads config.txt and asigns its data
 lastcommand = None
 dirsPath = None
-for i in open (relativePath ('config.txt')).readlines ():
+settings = reader.readFile (relativePath ('config.txt'))
+"""
 	index = i.split ('>')[0]
 	if index == "where":
 		dirsPath = i.split ('>')[1][:-1]
 	elif index == "lastcommand":
-		lastcommand = i.split ('>')[1][:-1]
+		lastcommand = i.split ('>')[1][:-1]"""
 file = open (os.path.join (dirsPath, 'copy.txt'), 'r')
 
 #Prepairments
