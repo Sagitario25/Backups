@@ -13,7 +13,7 @@ def readFile (path):
             if i[0] == '#':#Line to ignore
                 continue
             #Append to the list
-            readed [label] = info
+            readed [label] = info[:-1]
             labels.append (label)
     return readed, labels
 
