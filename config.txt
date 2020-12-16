@@ -1,3 +1,6 @@
 where>E:\Copia de seguridad
 lastcommand>cls
+backupdistance>30#minutes
+backupminimumage>14#days
+backupminimumcant>3#amount of versions
 end>keep this here
