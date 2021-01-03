@@ -1,6 +1,8 @@
 from dir import Tree
 import os
 import time
+import cleaner
+import reader
 
 def compareStrings (list1, list2):
 	#Compares two strings efficently
@@ -33,6 +35,15 @@ def compareDate (tree1, tree2):
 
 	return True
 
+def getVersions (path):
+    versions = []
+    for i in os.listdir (path):
+        if os.path.isdir (os.path.join (path, i)):
+            try:
+                versions.append (float (i))
+            except:
+                pass
+    return versions
 
 class Gestor:
 	def __init__ (self, fromPath, toPath, openFiles = False):
@@ -85,3 +96,20 @@ class Gestor:
 
 	def __exit__(self, exc_type = None, exc_value = None, traceback = None):
 		pass
+
+class versionGestor:
+	def __init__ (self, path):
+		self.versions = getVersions (path)
+	
+	def clean (self):
+		from main import relativePath
+		self.gestor = cleaner.VersionCleaner (versions = self.versions, settings = reader.Config (relativePath ("cleanerconfig.txt")))
+		self.gestor.byage ()
+		self.gestor.bydist ()
+		self.gestor.bycant ()
+		self.gestor.byage ()
+		print (self.gestor.toSave)
+		#delete part
+
+if __name__ == "__main__":
+	versionGestor (r"E:\Copia de seguridad\Informatica").clean ()

@@ -47,33 +47,37 @@ def backupPath (fromPath, toPath, logger = None, display = True):#Everythong rel
 	print (f"{name} ended.")
 
 
-#Reads config.txt and asigns its data
-lastcommand = None
-dirsPath = None
-settings = reader.Config (relativePath ('config.txt'))
+def main ():
+	#Reads config.txt and asigns its data
+	lastcommand = None
+	dirsPath = None
+	settings = reader.Config (relativePath ('config.txt'))
 
-dirsPath = settings.get ("where")
-lastcommand = settings.get ("lastcommand")
-
-
-#Prepairments
-copyTime = time.time ()
-mkdir (os.path.join (dirsPath, "logs"))
-logfile = log.Log (os.path.join (dirsPath, "logs", f"{str (copyTime)}.txt"), "a")
-logfile.write ("starting\n")
-
-copies = reader.Config (os.path.join (dirsPath, 'copy.txt'))
-copiesPath = copies.labels
-copiesInfo = copies.contents
+	dirsPath = settings.get ("where")
+	lastcommand = settings.get ("lastcommand")
 
 
-#Actual copying
-for i in copiesPath:
-	#Get fromPath and toPath from the copy file
-	origin = i
-	backup = os.path.join (dirsPath, copiesInfo [i])
-	backupPath (origin, backup, logfile)
+	#Prepairments
+	mkdir (os.path.join (dirsPath, "logs"))
+	logfile = log.Log (os.path.join (dirsPath, "logs", f"{str (copyTime)}.txt"), "a")
+	logfile.write ("starting\n")
 
-logfile.write (f"ended {time.ctime ()}\n")
-logfile.close ()
-os.system (lastcommand)
+	copies = reader.Config (os.path.join (dirsPath, 'copy.txt'))
+	copiesPath = copies.labels
+	copiesInfo = copies.contents
+
+
+	#Actual copying
+	for i in copiesPath:
+		#Get fromPath and toPath from the copy file
+		origin = i
+		backup = os.path.join (dirsPath, copiesInfo [i])
+		backupPath (origin, backup, logfile)
+
+	logfile.write (f"ended {time.ctime ()}\n")
+	logfile.close ()
+	os.system (lastcommand)
+
+if __name__ == "__main__":
+	copyTime = time.time ()
+	main ()

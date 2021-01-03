@@ -1,0 +1,4 @@
+backupdistance>30#minutes
+backupminimumage>30#days
+backupminimumcant>3#amount of versions
+backupmaximumcant>10#amount of versions, 0 to no limit
