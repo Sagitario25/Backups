@@ -1,8 +1,10 @@
 from dir import Tree
-import os
-import time
 import cleaner
 import reader
+
+import os
+import time
+import shutil
 
 def compareStrings (list1, list2):
 	#Compares two strings efficently
@@ -100,6 +102,7 @@ class Gestor:
 class versionGestor:
 	def __init__ (self, path):
 		self.versions = getVersions (path)
+		self.path = path
 	
 	def clean (self):
 		from main import relativePath
@@ -108,8 +111,23 @@ class versionGestor:
 		self.gestor.bydist ()
 		self.gestor.bycant ()
 		self.gestor.byage ()
-		print (self.gestor.toSave)
-		#delete part
+
+		return self.gestor.toSave
+
+	def invertList (self, versions):
+		self.notonlist = []
+		for i in self.versions:
+			if not i in versions:
+				self.notonlist.append (i)
+		return self.notonlist
+
+	def delnotinlist (self, versions):
+		self.delinlist (self.invertList (versions))
+
+	def delinlist (self, versions):
+		for i in versions:
+			#shutil.rmtree (os.path.join (self.path, i))
+			print (os.path.join (self.path, str (i)))
 
 if __name__ == "__main__":
 	versionGestor (r"E:\Copia de seguridad\Informatica").clean ()

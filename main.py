@@ -1,4 +1,4 @@
-from gestor import Gestor
+import gestor
 import os
 import time
 import log
@@ -22,30 +22,48 @@ def backupPath (fromPath, toPath, logger = None, display = True):#Everythong rel
 
 	#Read the data from fromPath
 	if display:
-		print (f"Opening {name}")
+		print (f"\tOpening {name}")
 	if logger != None:
-		logger.write (f"\n-{name}\n")
-	with Gestor (fromPath, toPath) as gest: 
+		logger.write (f"\n\t-{name}\n")
+	with gestor.Gestor (fromPath, toPath) as gest: 
 		if display:
-			print ("	Comparing...")
+			print ("\t\tComparing...")
 		if not gest.compare ():#Compare if new version is needed
 			#New version
 			if display:
-				print ("\tNew version needed. Copying...")
+				print ("\t\tNew version needed. Copying...")
 			if logger != None:
-				logger.write (f"\tcreating new version\t{time.ctime ()}\n")
+				logger.write (f"\t\tcreating new version\t{time.ctime ()}\n")
 			gest.move (newDir = copyTime)
 			if logger != None:
-				logger.write (f"\tend of new version\t{time.ctime ()}\n")
+				logger.write (f"\t\tend of new version\t{time.ctime ()}\n")
 		else:
 			#No need
 			if display:
-				print ("\tLast version is updated. No need to copy.")
+				print ("\t\tLast version is updated. No need to copy.")
 			if logger != None:
-				logger.write (f"\tno need to copy\n")
+				logger.write (f"\t\tno need to copy\n")
 
-	print (f"{name} ended.")
+	print (f"\t{name} ended.\n")
 
+def clearBackup (path, logger = None, display = True):
+	name = path.split ('\\')[-1]
+	if display:
+		print (f"\tOpening {name}")
+		print (f"\t\tAnalising...")
+	if logger != None:
+		logger.write (f"\t-{name}\n")
+		logger.write (f"\t\tAnalising...\n")
+	gest = gestor.versionGestor (path)
+	tokeep = gest.clean ()
+	if display:
+		print (f"\t\tDeleting {len (tokeep)} versions...")
+	if logger != None:
+		logger.write (f"\t\tDeleting {len (gest.versions) - len (tokeep)} versions...:")
+		logger.write (f"{str (gest.invertList(tokeep))}\n")
+	gest.delnotinlist (tokeep)
+
+	print ("\tCleaning ended\n")
 
 def main ():
 	#Reads config.txt and asigns its data
@@ -63,18 +81,27 @@ def main ():
 	logfile.write ("starting\n")
 
 	copies = reader.Config (os.path.join (dirsPath, 'copy.txt'))
-	copiesPath = copies.labels
 	copiesInfo = copies.contents
 
-
 	#Actual copying
-	for i in copiesPath:
+	logfile.write ("\nStarting backup creation")
+	print ("Starting backup creation")
+	for i in copiesInfo:
 		#Get fromPath and toPath from the copy file
 		origin = i
 		backup = os.path.join (dirsPath, copiesInfo [i])
 		backupPath (origin, backup, logfile)
+	logfile.write (f"Ending backupcreation {time.ctime ()}")
 
-	logfile.write (f"ended {time.ctime ()}\n")
+	#Deletion of unnecesary versions
+	print ("\n\nStarting version cleaner")
+	logfile.write ("\nStarting version cleaner\n")
+	for i in copiesInfo:
+		path = copiesInfo [i]
+		clearBackup (os.path.join (dirsPath, path), logfile)
+	
+
+	#End
 	logfile.close ()
 	os.system (lastcommand)
 
