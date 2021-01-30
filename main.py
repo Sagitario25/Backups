@@ -56,6 +56,7 @@ def clearBackup (path, logger = None, display = True):
 		logger.write (f"\t\tAnalising...\n")
 	gest = gestor.versionGestor (path)
 	tokeep = gest.clean ()
+	print (display)
 	if display:
 		print (f"\t\tDeleting {len (tokeep)} versions...")
 	if logger != None:
