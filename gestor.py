@@ -110,24 +110,23 @@ class versionGestor:
 		self.gestor.byage ()
 		self.gestor.bydist ()
 		self.gestor.bycant ()
-		self.gestor.byage ()
+		self.gestor.proccess ()
 
-		return self.gestor.toSave
+		return self.gestor.save
 
-	def invertList (self, versions):
-		self.notonlist = []
-		for i in self.versions:
-			if not i in versions:
-				self.notonlist.append (i)
-		return self.notonlist
+	def delversions (self, mask = False):
+		for i in range (len (self.versions)):
+			if self.gestor.save [i] == mask:
+				print (os.path.join (self.path, str (self.versions [i])))
+				#shutil.rmtree (os.path.join (self.path, self.versions [i]))
 
-	def delnotinlist (self, versions):
-		self.delinlist (self.invertList (versions))
+	def getunwanted (self):
+		self.result = []
+		for i in range (len (self.versions)):
+			if self.gestor.save [i] == False:
+				self.result.append (self.versions [i])
+		return self.result
 
-	def delinlist (self, versions):
-		for i in versions:
-			#shutil.rmtree (os.path.join (self.path, i))
-			print (os.path.join (self.path, str (i)))
 
 if __name__ == "__main__":
 	versionGestor (r"E:\Copia de seguridad\Informatica").clean ()

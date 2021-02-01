@@ -37,10 +37,10 @@ class VersionCleaner:
         self.versioncant = len (self.toSave)
 
         self.prioritysave = [priority (self.savebydist [i], self.savebyage [i]) for i in range (len (self.versions))]
-        #Get 4s, then 3s... Stop when max is reached. Delete min amount
         self.addedAmount = 0
         for n in range (4, 0, -1):#Possible prioroties (1-4)
-            print (self.addedAmount + self.prioritysave.count (n), self.upperLimit)
+            if n <= 2 and self.addedAmount > self.lowerLimit: #Stop if priority is tolow and minimum cant is surpassed
+                break
             if not self.addedAmount + self.prioritysave.count (n) >= self.upperLimit:#True if all the current version fit in
                 for i in range (len (self.prioritysave) - 1, -1, -1):
                     if self.prioritysave [i] == n:
