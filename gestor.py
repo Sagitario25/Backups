@@ -114,11 +114,10 @@ class versionGestor:
 
 		return self.gestor.save
 
-	def delversions (self, mask = False):
-		for i in range (len (self.versions)):
-			if self.gestor.save [i] == mask:
-				print (os.path.join (self.path, str (self.versions [i])))
-				#shutil.rmtree (os.path.join (self.path, self.versions [i]))
+	def delversions (self, gulag):
+		for i in range (len (self.gestor.save)):
+			if (not self.gestor.save [i]) and (not os.path.exists (os.path.join (gulag, str (self.versions [i])))):
+				shutil.move (os.path.join (self.path, str (self.versions [i])), gulag)
 
 	def getunwanted (self):
 		self.result = []

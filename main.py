@@ -46,7 +46,7 @@ def backupPath (fromPath, toPath, logger = None, display = True):#Everythong rel
 
 	print (f"\t{name} ended.\n")
 
-def clearBackup (path, logger = None, display = True):
+def clearBackup (path, gulagPath = None, logger = None, display = True):
 	name = path.split ('\\')[-1]
 	if display:
 		print (f"\tOpening {name}")
@@ -61,7 +61,8 @@ def clearBackup (path, logger = None, display = True):
 	if logger != None:
 		logger.write (f"\t\tDeleting {tokeep.count (False)} versions...:")
 		logger.write (f"{str (gest.getunwanted ())}\n")
-	gest.delversions ()
+	mkdir (gulagPath)
+	gest.delversions (gulagPath)
 
 	print ("\tCleaning ended\n")
 
@@ -76,8 +77,8 @@ def main ():
 
 
 	#Prepairments
-	mkdir (os.path.join (dirsPath, "logs"))
-	logfile = log.Log (os.path.join (dirsPath, "logs", f"{str (copyTime)}.txt"), "a")
+	mkdir (os.path.join (dirsPath, "- logs"))
+	logfile = log.Log (os.path.join (dirsPath, "- logs", f"{str (copyTime)}.txt"), "a")
 	logfile.write ("starting\n")
 
 	copies = reader.Config (os.path.join (dirsPath, 'copy.txt'))
@@ -98,8 +99,11 @@ def main ():
 	logfile.write ("\nStarting version cleaner\n")
 	for i in copiesInfo:
 		path = copiesInfo [i]
-		clearBackup (os.path.join (dirsPath, path), logfile)
-	
+		clearBackup (path = os.path.join (dirsPath, path), gulagPath = os.path.join (dirsPath, "- gulag", path), logger = logfile)
+#Delete old versions in gulag
+#Enhance maximun amount of versions
+#Print-log function
+#add error to reading
 
 	#End
 	logfile.close ()
