@@ -52,7 +52,6 @@ class Gestor:
 		self.fromPath = fromPath
 		self.toPath = toPath
 
-		self.toTree = Tree (self.toPath, openFiles = openFiles)
 		self.fromTree = Tree (self.fromPath, openFiles = openFiles)
 
 		self.versions = []
@@ -64,7 +63,7 @@ class Gestor:
 					self.versions.append (float (i))
 				except:
 					pass
-
+		
 		try:
 			self.max = max (self.versions)
 		except:
@@ -85,7 +84,7 @@ class Gestor:
 			return False
 
 	def move (self, newDir = None):
-		self.time = time
+		#self.time = time
 		self.where = self.toPath
 		newDir = str (newDir)
 		if newDir != None:

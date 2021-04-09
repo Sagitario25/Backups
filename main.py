@@ -28,16 +28,21 @@ def backupPath (fromPath, toPath, logger = None, display = True):#Everythong rel
 
 	#Read the data from fromPath
 	output (f"\tOpening {name}", display = display, logger = logger)
-	with gestor.Gestor (fromPath, toPath) as gest: 
-		output ("\t\tComparing...", display = display)
-		if not gest.compare ():#Compare if new version is needed
-			#New version
-			output ("\t\tNew version needed. Copying...", display = display, logger = logger)
-			gest.move (newDir = copyTime)
-			output (f"\t\tend of new version\t{time.ctime ()}\n", logger = logger)
-		else:
-			#No need
-			output ("\t\tLast version is updated. No need to copy.", display = display, logger = logger)
+	try:
+		with gestor.Gestor (fromPath, toPath) as gest: 
+			output ("\t\tComparing...", display = display)
+			if not gest.compare ():#Compare if new version is needed
+				#New version
+				output ("\t\tNew version needed. Copying...", display = display, logger = logger)
+				gest.move (newDir = copyTime)
+				output (f"\t\tend of new version\t{time.ctime ()}\n", logger = logger)
+			else:
+				#No need
+				output ("\t\tLast version is updated. No need to copy.", display = display, logger = logger)
+	except Exception as error:
+		output ("\t\tAn error acurred during the process", display = display, logger = logger)
+		output (f'\t\tGo to log to get more information "{logger.path}"', display = display)
+		output (f"\t\t{str (error)}", logger = logger)
 
 	output (f"\t{name} ended.\n", display = display, logger = logger)
 
@@ -87,8 +92,6 @@ def main ():
 		path = copiesInfo [i]
 		clearBackup (path = os.path.join (dirsPath, path), gulagPath = os.path.join (dirsPath, "- gulag", path), logger = logfile)
 #Delete old versions in gulag
-#Enhance maximun amount of versions
-#Print-log function
 #add error to reading
 
 	#End

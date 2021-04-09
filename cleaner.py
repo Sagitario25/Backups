@@ -82,5 +82,6 @@ if __name__ == "__main__":
     c.byage ()
     c.bydist ()
     c.bycant ()
-    c.proccess ()
-    print (c.save)
+    print (c.savebydist)
+    print (c.savebycant)
+    print (c.savebyage)
